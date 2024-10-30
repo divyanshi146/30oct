@@ -5,8 +5,9 @@ import path from 'path';
 export async function GET() {
   const isLocal = process.env.NODE_ENV === 'development';
   const filePath = isLocal 
-    ? path.join('D:\\', 'RegistrationOfBSA.txt') 
-    : process.env.PRODUCTION_FILE_PATH; // Environment variable for production
+  ? path.join('D:\\', 'RegistrationOfBSA.txt') 
+  : process.env.PRODUCTION_FILE_PATH || '/fallback/path/to/file.txt'; // Optional fallback
+
 
   // Ensure filePath is defined
   if (!filePath) {
