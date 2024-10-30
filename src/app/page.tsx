@@ -1,4 +1,3 @@
-// pages/index.tsx
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -12,8 +11,11 @@ const FileReader: React.FC = () => {
       try {
         const response = await fetch('/api/getpath');
         const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to fetch file content');
+        }
         setContent(data.content);
-        console.log("content", data.content); // This should now have the correct content
+        console.log("content", data.content);
         console.log('Current Environment:', process.env.NODE_ENV);
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -23,7 +25,6 @@ const FileReader: React.FC = () => {
         }
       }
     };
-    
 
     fetchFileContent();
   }, []);
@@ -49,6 +50,7 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
+
 
 
 

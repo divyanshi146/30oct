@@ -1,18 +1,21 @@
-// src/app/api/getpath/route.ts
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 
 export async function GET() {
-  const filePath =  'D:\\RegistrationOfBSA.txt'; // Local path
+  const filePath = 'D:\\RegistrationOfBSA.txt'; // Local path
 
   try {
     const data = fs.readFileSync(filePath, 'utf8');
     return NextResponse.json({ content: data });
   } catch (err: unknown) {
     console.error('Error reading file:', err);
-    return NextResponse.json({ error: 'Failed to read file', details: err instanceof Error ? err.message : 'Unknown error occurred' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to read file', details: err instanceof Error ? err.message : 'Unknown error occurred' },
+      { status: 500 }
+    );
   }
 }
+
 
 
 
