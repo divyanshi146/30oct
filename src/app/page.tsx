@@ -10,13 +10,12 @@ const FileReader: React.FC = () => {
     const fetchFileContent = async () => {
       try {
         const response = await fetch('/api/getpath');
-        const data = await response.json();
         if (!response.ok) {
-          throw new Error(data.error || 'Failed to fetch file content');
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        const data = await response.json();
         setContent(data.content);
-        console.log("content", data.content);
-        console.log('Current Environment:', process.env.NODE_ENV);
+        console.log("Content fetched:", data.content);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
