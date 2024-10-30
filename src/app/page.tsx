@@ -1,15 +1,54 @@
-import { fetchData } from '../app/api/getpath/route';
+// pages/index.tsx
+"use client";
 
-export default async function Page2() {
-  const data = await fetchData();
+import { useEffect, useState } from 'react';
+
+const FileReader: React.FC = () => {
+  const [content, setContent] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchFileContent = async () => {
+      try {
+        const response = await fetch('/api/getpath');
+        const data = await response.json();
+        setContent(data.content);
+        console.log("content", data.content); // This should now have the correct content
+        console.log('Current Environment:', process.env.NODE_ENV);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred');
+        }
+      }
+    };
+    
+
+    fetchFileContent();
+  }, []);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div>
-{data}
+      {content ? <pre>{content}</pre> : 'Loading...'}
     </div>
   );
-}
+};
 
+const HomePage: React.FC = () => {
+  return (
+    <div>
+      <h1>File Content</h1>
+      <FileReader />
+    </div>
+  );
+};
+
+export default HomePage;
 
 
 
