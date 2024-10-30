@@ -6,16 +6,19 @@ export async function GET() {
   const isLocal = process.env.NODE_ENV === 'development';
 
   if (!isLocal) {
-    return NextResponse.json(
-      { content: 'This feature is not available in production.' },
-      { status: 403 }
-    );
+    const content = process.env.FILE_CONTENT; // Store file content in an env variable
+    if (!content) {
+      return NextResponse.json(
+        { content: 'No content available.' },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json({ content });
   }
 
   const filePath = 'D:\\RegistrationOfBSA.txt'; // Local file path
 
   try {
-    // Check if the file exists
     if (!fs.existsSync(filePath)) {
       throw new Error(`File not found at path: ${filePath}`);
     }
