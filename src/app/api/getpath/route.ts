@@ -1,39 +1,14 @@
-import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { promises as fs } from 'fs';
 
-export async function GET() {
-  const isLocal = process.env.NODE_ENV === 'development';
-
-  if (!isLocal) {
-    const content = process.env.FILE_CONTENT; // Store file content in an env variable
-    if (!content) {
-      return NextResponse.json(
-        { content: 'No content available.' },
-        { status: 404 }
-      );
-    }
-    return NextResponse.json({ content });
-  }
-
-  const filePath = 'D:\\RegistrationOfBSA.txt'; // Local file path
-
+export async function fetchData() {
   try {
-    if (!fs.existsSync(filePath)) {
-      throw new Error(`File not found at path: ${filePath}`);
-    }
-
-    const data = fs.readFileSync(filePath, 'utf8');
-    return NextResponse.json({ content: data });
-  } catch (err: unknown) {
-    console.error('Error reading file:', err);
-    return NextResponse.json(
-      { error: 'Failed to read file', details: err instanceof Error ? err.message : 'Unknown error occurred' },
-      { status: 500 }
-    );
+    const file = await fs.readFile('D:\\RegistrationOfBSA.txt', 'utf8');
+    return file; // Return the raw text content
+  } catch (error) {
+    console.error('Error reading the file:', error);
+    throw error;
   }
 }
-
 
 
 
